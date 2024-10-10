@@ -1,0 +1,118 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class POD {
+    int id;
+    string name;
+    string status;
+};
+
+class PODManager {
+private:
+    vector<POD> pods;
+
+public:
+    void themPOD(int id, string name, string status) {
+        pods.push_back({id, name, status});
+        cout << "Thêm POD thành công!\n";
+    }
+
+    void suaPOD(int id, string name, string status) {
+        for (auto& pod : pods) {
+            if (pod.id == id) {
+                pod.name = name;
+                pod.status = status;
+                cout << "Sửa POD thành công!\n";
+                return;
+            }
+        }
+        cout << "Không tìm thấy POD!\n";
+    }
+
+    void xoaPOD(int id) {
+        for (size_t i = 0; i < pods.size(); i++) {
+            if (pods[i].id == id) {
+                pods.erase(pods.begin() + i);
+                cout << "Xóa POD thành công!\n";
+                return;
+            }
+        }
+        cout << "Không tìm thấy POD!\n";
+    }
+
+    void hienThiPOD() {
+        for (const auto& pod : pods) {
+            cout << "ID: " << pod.id << ", Name: " << pod.name << ", Status: " << pod.status << "\n";
+        }
+    }
+};
+class TaiKhoanNguoiDung {
+    int id;
+    string tenNguoiDung;
+    string email;
+};
+
+class QuanLyTaiKhoan {
+private:
+    vector<TaiKhoanNguoiDung> taiKhoanList;
+
+public:
+    void themTaiKhoan(int id, string tenNguoiDung, string email) {
+        taiKhoanList.push_back({id, tenNguoiDung, email});
+        cout << "Thêm tài khoản thành công!\n";
+    }
+
+    void suaTaiKhoan(int id, string tenNguoiDung, string email) {
+        for (auto& tk : taiKhoanList) {
+            if (tk.id == id) {
+                tk.tenNguoiDung = tenNguoiDung;
+                tk.email = email;
+                cout << "Sửa tài khoản thành công!\n";
+                return;
+            }
+        }
+        cout << "Không tìm thấy tài khoản!\n";
+    }
+
+    void xoaTaiKhoan(int id) {
+        for (size_t i = 0; i < taiKhoanList.size(); i++) {
+            if (taiKhoanList[i].id == id) {
+                taiKhoanList.erase(taiKhoanList.begin() + i);
+                cout << "Xóa tài khoản thành công!\n";
+                return;
+            }
+        }
+        cout << "Không tìm thấy tài khoản!\n";
+    }
+
+    void hienThiTaiKhoan() {
+        for (const auto& tk : taiKhoanList) {
+            cout << "ID: " << tk.id << ", Tên: " << tk.tenNguoiDung << ", Email: " << tk.email << "\n";
+        }
+    }
+};
+class PheDuyetPOD {
+public:
+    void pheDuyet(int podId, string tenNguoiDung) {
+        cout << "POD " << podId << " của người dùng " << tenNguoiDung << " đã được phê duyệt.\n";
+    }
+};
+class BaoCaoCoBan {
+public:
+    void xemBaoCaoCoBan(vector<POD> pods, vector<TaiKhoanNguoiDung> taiKhoanList) {
+        cout << "Báo cáo cơ bản POD:\n";
+        for (const auto& pod : pods) {
+            cout << "ID: " << pod.id << ", Tên: " << pod.name << ", Trạng thái: " << pod.status << "\n";
+        }
+
+        cout << "\nBáo cáo tài khoản người dùng:\n";
+        for (const auto& tk : taiKhoanList) {
+            cout << "ID: " << tk.id << ", Tên: " << tk.tenNguoiDung << ", Email: " << tk.email << "\n";
+        }
+    }
+return 0;
+}
+
