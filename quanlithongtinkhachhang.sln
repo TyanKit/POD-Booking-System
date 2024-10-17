@@ -1,25 +1,92 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.11.35312.102
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "quanlithongtinkhachhang", "quanlithongtinkhachhang.csproj", "{9C3FE35A-48EC-41FB-82A0-7C3F791C070D}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9C3FE35A-48EC-41FB-82A0-7C3F791C070D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C3FE35A-48EC-41FB-82A0-7C3F791C070D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C3FE35A-48EC-41FB-82A0-7C3F791C070D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C3FE35A-48EC-41FB-82A0-7C3F791C070D}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8243A084-4795-40ED-AF60-18580C31CA73}
-	EndGlobalSection
-EndGlobal
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CustomerManagementApp
+{
+    public class Customer
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Feedback { get; set; } = string.Empty;
+        public List<BookingHistory> BookingHistories { get; set; } = new(); 
+    }
+
+    public class BookingHistory
+    {
+        public DateTime BookingDate { get; set; }
+        public string ServiceDetails { get; set; } = string.Empty;
+    }
+
+    public class CustomerManagement
+    {
+        // IDE0044: Thêm readonly để biến không thay đổi sau khi khởi tạo
+        private readonly List<Customer> customers = new();
+
+        public void AddCustomer(Customer customer)
+        {
+            customers.Add(customer);
+        }
+
+        public Customer? GetCustomer(int id)
+        {
+            return customers.FirstOrDefault(c => c.Id == id); 
+        }
+
+        public void UpdateCustomer(int id, Customer updatedCustomer)
+        {
+            var customer = GetCustomer(id);
+            if (customer != null && updatedCustomer != null)
+            {
+                customer.Name = updatedCustomer.Name;
+                customer.Email = updatedCustomer.Email;
+                customer.Phone = updatedCustomer.Phone;
+            }
+        }
+
+        public void LeaveFeedback(int customerId, string feedback)
+        {
+            var customer = GetCustomer(customerId);
+            if (customer != null)
+            {
+                customer.Feedback = feedback;
+            }
+        }
+
+        public List<BookingHistory>? GetBookingHistory(int customerId)
+        {
+            return GetCustomer(customerId)?.BookingHistories;
+        }
+        public void AddBookingHistory(int customerId, BookingHistory booking)
+        {
+            var customer = GetCustomer(customerId);
+            customer?.BookingHistories.Add(booking);
+        }
+    }
+
+    public class Program
+    {
+        public static void Main()
+        {
+            CustomerManagement cm = new();
+            cm.AddCustomer(new Customer { Id = 1, Name = "NGUYEN VAN  A", Email = "a@example.com", Phone = "0123456789" });
+            cm.UpdateCustomer(1, new Customer { Name = "NGUYEN VAN  B", Email = "b@example.com", Phone = "0987654321" });
+            cm.LeaveFeedback(1, "dich vu that tuyet voi !");
+
+            // Thêm và xem lịch sử đặt chỗ
+            cm.AddBookingHistory(1, new BookingHistory { BookingDate = DateTime.Now, ServiceDetails = "Su dung khong gian va lam viec" });
+            var history = cm.GetBookingHistory(1);
+
+            if (history != null)
+            {
+                foreach (var booking in history)
+                {
+                    Console.WriteLine($"Ngay dat: {booking.BookingDate}, Chi tiet: {booking.ServiceDetails}");
+                }
+            }
+            Console.ReadLine();
+        }
+    }
+}
