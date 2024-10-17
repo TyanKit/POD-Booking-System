@@ -73,9 +73,7 @@ namespace CustomerManagementApp
             CustomerManagement cm = new();
             cm.AddCustomer(new Customer { Id = 1, Name = "NGUYEN VAN  A", Email = "a@example.com", Phone = "0123456789" });
             cm.UpdateCustomer(1, new Customer { Name = "NGUYEN VAN  B", Email = "b@example.com", Phone = "0987654321" });
-            cm.LeaveFeedback(1, "dich vu that tuyet voi !");
-
-            // Thêm và xem lịch sử đặt chỗ
+            cm.LeaveFeedback(1, "dich vu that tuyet voi !")
             cm.AddBookingHistory(1, new BookingHistory { BookingDate = DateTime.Now, ServiceDetails = "Su dung khong gian va lam viec" });
             var history = cm.GetBookingHistory(1);
 
