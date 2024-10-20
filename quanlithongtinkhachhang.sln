@@ -22,7 +22,6 @@ namespace CustomerManagementApp
 
     public class CustomerManagement
     {
-        // IDE0044: Thêm readonly để biến không thay đổi sau khi khởi tạo
         private readonly List<Customer> customers = new();
 
         public void AddCustomer(Customer customer)
