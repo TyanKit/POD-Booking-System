@@ -1,0 +1,41 @@
+<!-- contact.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <!-- [Head section giống index.html] -->
+</head>
+<body>
+    <header class="header">
+        <!-- [Navigation giống index.html] -->
+    </header>
+
+    <section class="hero">
+        <h1>Liên Hệ</h1>
+        <p>Chúng tôi luôn sẵn sàng hỗ trợ bạn</p>
+    </section>
+
+    <div class="container">
+        <div class="form-container">
+            <form action="/submit-contact" method="POST">
+                <div class="form-group">
+                    <label for="name">Họ và tên</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Nội dung</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="book-button">Gửi tin nhắn</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <!-- [Footer giống index.html] -->
+    </footer>
+</body>
+</html>
