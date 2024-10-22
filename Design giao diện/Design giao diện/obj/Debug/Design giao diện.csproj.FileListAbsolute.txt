@@ -1,4 +1,0 @@
-D:\POD\Design giao diện\Design giao diện\obj\Debug\Design giao diện.csproj.AssemblyReference.cache
-D:\POD\Design giao diện\Design giao diện\obj\Debug\Design_giao_diện.Properties.Resources.resources
-D:\POD\Design giao diện\Design giao diện\obj\Debug\Design giao diện.csproj.GenerateResource.cache
-D:\POD\Design giao diện\Design giao diện\obj\Debug\Design giao diện.csproj.CoreCompileInputs.cache
