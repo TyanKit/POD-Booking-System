@@ -1,0 +1,101 @@
+﻿CREATE DATABASE POD_Booking_System_F6;
+GO
+
+USE POD_Booking_System_F6;
+GO
+
+-- Users
+-- Pods
+-- Bookings
+-- ServicePackages
+-- BookingServices
+-- Payments
+-- Notifications
+-- Reports
+
+
+CREATE TABLE USERS
+(
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    FullName NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(255) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    PhoneNumber NVARCHAR(20),
+    IsVIP BIT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE PODS 
+(
+    PodID INT PRIMARY KEY IDENTITY(1,1),
+    PodName NVARCHAR(255) NOT NULL,
+    Location NVARCHAR(255) NOT NULL,
+    Capacity INT NOT NULL,
+    IsAvailable BIT DEFAULT 1,
+    Description NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE BOOKINGS 
+(
+    BookingID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    PodID INT NOT NULL,
+    StartTime DATETIME NOT NULL,
+    EndTime DATETIME NOT NULL,
+    Status NVARCHAR(50) DEFAULT 'Pending',
+    TotalPrice DECIMAL(10, 2) NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (PodID) REFERENCES Pods(PodID)
+);
+
+CREATE TABLE SERVICEPACKAGES 
+(
+    PackageID INT PRIMARY KEY IDENTITY(1,1),
+    PackageName NVARCHAR(255) NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    DurationHours INT NOT NULL, -- Số giờ sử dụng
+    Description NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE BOOKINGSERVICES 
+(
+    BookingServiceID INT PRIMARY KEY IDENTITY(1,1),
+    BookingID INT NOT NULL,
+    PackageID INT NOT NULL,
+    Quantity INT NOT NULL,
+    TotalPrice DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (BookingID) REFERENCES Bookings(BookingID),
+    FOREIGN KEY (PackageID) REFERENCES ServicePackages(PackageID)
+);
+
+CREATE TABLE PAYMENTS 
+(
+    PaymentID INT PRIMARY KEY IDENTITY(1,1),
+    BookingID INT NOT NULL,
+    PaymentMethod NVARCHAR(50) NOT NULL,
+    Amount DECIMAL(10, 2) NOT NULL,
+    PaymentStatus NVARCHAR(50) DEFAULT 'Pending',
+    PaymentDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (BookingID) REFERENCES Bookings(BookingID)
+);
+
+CREATE TABLE NOTIFICATIONS 
+(
+    NotificationID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    Message NVARCHAR(MAX) NOT NULL,
+    IsRead BIT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE REPORTS 
+(
+    ReportID INT PRIMARY KEY IDENTITY(1,1),
+    ReportType NVARCHAR(50) NOT NULL,
+    ReportData NVARCHAR(MAX) NOT NULL,
+    GeneratedAt DATETIME DEFAULT GETDATE()
+);
