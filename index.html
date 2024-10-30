@@ -8,32 +8,35 @@
 </head>
 <body>
     <div class="container">
-        <div class="login-container">
+        <div class="login-container" id="login-container">
             <h1>Đăng nhập vào POD Booking System</h1>
             <form id="loginForm" action="/login" method="post">
                 <label for="username">Tên đăng nhập:</label>
                 <input type="text" id="username" name="username" required>
-                
+
                 <label for="password">Mật khẩu:</label>
                 <input type="password" id="password" name="password" required>
-                
+
                 <button type="submit">Đăng nhập</button>
             </form>
             <p>Chưa có tài khoản? <a href="#" id="showRegisterForm">Đăng ký ngay</a></p>
         </div>
 
-        <div class="register-container" style="display:none;">
-            <h1>Đăng ký tài khoản mới</h1>
+        <div class="register-container" id="register-container" style="display: none;">
+            <h1>Đăng ký tài khoản POD Booking System</h1>
             <form id="registerForm" action="/register" method="post">
                 <label for="reg-username">Tên đăng nhập:</label>
                 <input type="text" id="reg-username" name="username" required>
-                
+
                 <label for="reg-password">Mật khẩu:</label>
                 <input type="password" id="reg-password" name="password" required>
-                
+
+                <label for="confirm-password">Xác nhận mật khẩu:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+
                 <button type="submit">Đăng ký</button>
             </form>
-            <p>Đã có tài khoản? <a href="#" id="showLoginForm">Đăng nhập</a></p>
+            <p>Đã có tài khoản? <a href="#" id="showLoginForm">Đăng nhập ngay</a></p>
         </div>
     </div>
     <script src="interact.js"></script>
