@@ -1,0 +1,9 @@
+{
+    "loginUrl": "/login",
+    "registerUrl": "/register",
+    "messages": {
+        "loginSuccess": "Đăng nhập thành công!",
+        "loginFailed": "Tên đăng nhập hoặc mật khẩu không đúng.",
+        
+    }
+}
