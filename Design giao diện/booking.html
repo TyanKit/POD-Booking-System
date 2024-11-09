@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Pod - Hệ Thống Đặt Pod</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #1e90ff;
+            color: #fff;
+            padding: 1rem 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Booking Section Styles */
+        .booking-section {
+            padding: 3rem 0;
+        }
+
+        .booking-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #666;
+        }
+
+        /* Pod Options Styles */
+        .pod-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .pod-option {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pod-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pod-option.selected {
+            border-color: #4CAF50;
+            background-color: #f8fff8;
+        }
+
+        .pod-option img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .pod-option h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .pod-option p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Form Styles */
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Price Summary Styles */
+        .price-summary {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .price-summary h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .total-price {
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: none;
+            color: #1e90ff;
+        }
+
+        /* Button Styles */
+        .submit-btn {
+            background-color: #1e90ff;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #1e90ff;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 1rem;
+            }
+
+            .booking-container {
+                padding: 1rem;
+            }
+
+            .pod-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Hệ Thống Đặt Pod</a>
+            <nav>
+                <ul>
+                    <li><a href="about.html">Giới Thiệu</a></li>
+                    <li><a href="services.html">Dịch Vụ</a></li>
+                    <li><a href="locations.html">Địa Điểm</a></li>
+                    <li><a href="contact.html">Liên Hệ</a></li>
+                    <li><a href="booking.html">Đặt Ngay</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="booking-section">
+        <div class="booking-container">
+            <div class="section-header">
+                <h2>Đặt Pod Của Bạn</h2>
+                <p>Chọn pod yêu thích và thông tin đặt chỗ của bạn</p>
+            </div>
+
+            <form class="booking-form">
+                <div class="pod-options">
+                    <div class="pod-option" data-price="200000">
+                        <img src="https://th.bing.com/th/id/OIP.icrpbaPJi5n8ibXKN9mQvQHaE-?rs=1&pid=ImgDetMain" alt="Pod tiêu chuẩn">
+                        <h4>Pod Tiêu Chuẩn</h4>
+                        <p>Hoàn hảo cho những chuyến lưu trú ngắn</p>
+                        <p>200.000 VNĐ / giờ</p>
+                    </div>
+                    <div class="pod-option" data-price="350000">
+                        <img src="https://i.pinimg.com/originals/6b/ab/b6/6babb6084466d69c86c9b45ad7334544.jpg" alt="Pod cao cấp">
+                        <h4>Pod Cao Cấp</h4>
+                        <p>Thêm sự thoải mái và không gian</p>
+                        <p>350.000 VNĐ / giờ</p>
+                    </div>
+                    <div class="pod-option" data-price="500000">
+                        <img src="https://zfbarcelona.es/wp-content/uploads/2022/04/k6a0140-1-768x512.jpg" alt="Pod sang trọng">
+                        <h4>Pod Sang Trọng</h4>
+                        <p>Trải nghiệm sang trọng</p>
+                        <p>500.000 VNĐ / giờ</p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="check-in">Ngày Nhận Phòng</label>
+                        <input type="datetime-local" id="check-in" name="check-in" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="check-out">Ngày Trả Phòng</label>
+                        <input type="datetime-local" id="check-out" name="check-out" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="guests">Số Lượng Khách</label>
+                        <select id="guests" name="guests" required>
+                            <option value="1">1 Người</option>
+                            <option value="2">2 Người</option>
+                            <option value="3">3 Người</option>
+                            <option value="4">4 Người</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Địa Điểm</label>
+                        <select id="location" name="location" required>
+                            <option value="">Chọn Địa Điểm</option>
+                            <option value="downtown">Quận Bình Thạnh</option>
+                            <option value="airport">TP Thủ Đức</option>
+                            <option value="beach">Quận 12</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Họ và Tên</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số Điện Thoại</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="special-requests">Yêu Cầu Đặc Biệt</label>
+                    <textarea id="special-requests" name="special-requests" rows="4"></textarea>
+                </div>
+
+                <div class="price-summary">
+                    <h3>Tóm Tắt Giá</h3>
+                    <div class="price-item">
+                        <span>Giá Pod</span>
+                        <span id="pod-price">0 VNĐ</span>
+                    </div>
+                    <div class="price-item">
+                        <span>Thuế & Phí</span>
+                        <span id="tax-fee">0 VNĐ</span>
+                    </div>
+                    <div class="price-item total-price">
+                        <span>Tổng Cộng</span>
+                        <span id="total-price">0 VNĐ</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Xác Nhận Đặt Chỗ</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-container">
+            <p>Cảm ơn bạn đã ghé thăm trang của chúng tôi!</p>
+        </div>
+    </footer>
+
+    <script>
+        const podOptions = document.querySelectorAll('.pod-option');
+        const checkInInput = document.getElementById('check-in');
+        const checkOutInput = document.getElementById('check-out');
+        const guestsSelect = document.getElementById('guests');
+        const bookingForm = document.querySelector('.booking-form');
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        function calculateHours(startDate, endDate) {
+            const diff = endDate - startDate;
+            return Math.ceil(diff / (1000 * 60 * 60));
+        }
+
+        function calculateTotal() {
+            const selectedPod = document.querySelector('.pod-option.selected');
+            if (!selectedPod || !checkInInput.value || !checkOutInput.value) return;
+
+            const podPrice = parseInt(selectedPod.dataset.price);
+            const startDate = new Date(checkInInput.value);
+            const endDate = new Date(checkOutInput.value);
+            const hours = calculateHours(startDate, endDate);
+            const basePrice = podPrice * hours;
+            const guests = parseInt(guestsSelect.value);
+            const guestSurcharge = guests > 1 ? (guests - 1) * (basePrice * 0.1) : 0;
+            const tax = basePrice * 0.1;
+            const total = basePrice + guestSurcharge + tax;
+
+            document.getElementById('pod-price').textContent = formatCurrency(basePrice);
+            document.getElementById('tax-fee').textContent = formatCurrency(tax);
+            document.getElementById('total-price').textContent = formatCurrency(total);
+        }
+
+        podOptions.forEach(pod => {
+            pod.addEventListener('click', () => {
+                podOptions.forEach(p => p.classList.remove('selected'));
+                pod.classList.add('selected');
+                calculateTotal();
+            });
+        });
+
+        checkInInput.addEventListener('change', calculateTotal);
+        checkOutInput.addEventListener('change', calculateTotal);
+        guestsSelect.addEventListener('change', calculateTotal);
+
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!document.querySelector('.pod-option.selected')) {
+                alert('Vui lòng chọn loại pod');
+                return;
+            }
+
+            const startDate = new Date(checkInInput.value);
+            const endDate = new Date(checkOutInput.value);
+
+            if (!checkInInput.value || !checkOutInput.value) {
+                alert('Vui lòng chọn thời gian nhận và trả pod');
+                return;
+            }
+
+            if (endDate <= startDate) {
+                alert('Thời gian trả pod phải sau thời gian nhận pod');
+                return;
+            }
+
+            const requiredFields = ['name', 'email', 'phone', 'location'];
+            for (const field of requiredFields) {
+                const input = document.getElementById(field);
+                if (!input.value) {
+                    alert(`Vui lòng điền ${input.previousElementSibling.textContent}`);
+                    return;
+                }
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(document.getElementById('email').value)) {
+                alert('Email không hợp lệ');
+                return;
+            }
+
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(document.getElementById('phone').value)) {
+                alert('Số điện thoại không hợp lệ (phải có 10 chữ số)');
+                return;
+            }
+
+            const selectedPod = document.querySelector('.pod-option.selected');
+            const podType = selectedPod.querySelector('h4').textContent;
+            const totalPrice = document.getElementById('total-price').textContent;
+
+            const confirmMessage = `
+                Xác nhận đặt pod:
+                - Loại pod: ${podType}
+                - Thời gian nhận: ${new Date(checkInInput.value).toLocaleString()}
+                - Thời gian trả: ${new Date(checkOutInput.value).toLocaleString()}
+                - Số khách: ${guestsSelect.value}
+                - Tổng tiền: ${totalPrice}
+
+                Bạn có muốn xác nhận đặt pod?
+            `;
+
+            if (confirm(confirmMessage)) {
+                alert('Đặt pod thành công! Chúng tôi sẽ liên hệ với bạn sớm.');
+                bookingForm.reset();
+                podOptions.forEach(p => p.classList.remove('selected'));
+                document.getElementById('pod-price').textContent = '0 VNĐ';
+                document.getElementById('tax-fee').textContent = '0 VNĐ';
+                document.getElementById('total-price').textContent = '0 VNĐ';
+            }
+        });
+
+        // Thiết lập giá trị mặc định cho thời gian
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        checkInInput.min = now.toISOString().slice(0, 16);
+        checkInInput.value = now.toISOString().slice(0, 16);
+
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        checkOutInput.min = tomorrow.toISOString().slice(0, 16);
+        checkOutInput.value = tomorrow.toISOString().slice(0, 16);
+    </script>
+</body>
+</html>
