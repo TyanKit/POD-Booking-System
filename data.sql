@@ -1,8 +1,6 @@
 ﻿CREATE DATABASE POD_Booking_System_F6;
-GO
 
 USE POD_Booking_System_F6;
-GO
 
 -- Users
 -- Pods
