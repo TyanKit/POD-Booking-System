@@ -1,0 +1,186 @@
+﻿using System;
+using System.Collections.Generic;
+
+class POD
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Status { get; set; }
+
+    public POD(int id, string name, string status)
+    {
+        Id = id;
+        Name = name;
+        Status = status;
+    }
+}
+
+class PODManager
+{
+    private List<POD> pods = new List<POD>();
+
+    public void ThemPOD(int id, string name, string status)
+    {
+        if (pods.Exists(p => p.Id == id))
+        {
+            Console.WriteLine("POD đã tồn tại với ID này!");
+            return;
+        }
+        pods.Add(new POD(id, name, status));
+        Console.WriteLine("Thêm POD thành công!");
+    }
+
+    public void SuaPOD(int id, string name, string status)
+    {
+        var pod = pods.Find(p => p.Id == id);
+        if (pod != null)
+        {
+            pod.Name = name;
+            pod.Status = status;
+            Console.WriteLine("Sửa POD thành công!");
+        }
+        else
+        {
+            Console.WriteLine("Không tìm thấy POD!");
+        }
+    }
+
+    public void XoaPOD(int id)
+    {
+        int removedCount = pods.RemoveAll(p => p.Id == id);
+        Console.WriteLine(removedCount > 0 ? "Xóa POD thành công!" : "Không tìm thấy POD!");
+    }
+
+    public List<POD> LayDanhSachPODs() => new List<POD>(pods);
+
+    public void HienThiPOD()
+    {
+        if (pods.Count == 0)
+        {
+            Console.WriteLine("Không có POD nào.");
+        }
+        else
+        {
+            foreach (var pod in pods)
+            {
+                Console.WriteLine($"ID: {pod.Id}, Name: {pod.Name}, Status: {pod.Status}");
+            }
+        }
+    }
+}
+
+class TaiKhoanNguoiDung
+{
+    public int Id { get; set; }
+    public string TenNguoiDung { get; set; }
+    public string Email { get; set; }
+
+    public TaiKhoanNguoiDung(int id, string tenNguoiDung, string email)
+    {
+        Id = id;
+        TenNguoiDung = tenNguoiDung;
+        Email = email;
+    }
+}
+
+class QuanLyTaiKhoan
+{
+    private List<TaiKhoanNguoiDung> taiKhoanList = new List<TaiKhoanNguoiDung>();
+
+    public void ThemTaiKhoan(int id, string tenNguoiDung, string email)
+    {
+        if (taiKhoanList.Exists(tk => tk.Id == id))
+        {
+            Console.WriteLine("Tài khoản đã tồn tại với ID này!");
+            return;
+        }
+        taiKhoanList.Add(new TaiKhoanNguoiDung(id, tenNguoiDung, email));
+        Console.WriteLine("Thêm tài khoản thành công!");
+    }
+
+    public void SuaTaiKhoan(int id, string tenNguoiDung, string email)
+    {
+        var tk = taiKhoanList.Find(t => t.Id == id);
+        if (tk != null)
+        {
+            tk.TenNguoiDung = tenNguoiDung;
+            tk.Email = email;
+            Console.WriteLine("Sửa tài khoản thành công!");
+        }
+        else
+        {
+            Console.WriteLine("Không tìm thấy tài khoản!");
+        }
+    }
+
+    public void XoaTaiKhoan(int id)
+    {
+        int removedCount = taiKhoanList.RemoveAll(tk => tk.Id == id);
+        Console.WriteLine(removedCount > 0 ? "Xóa tài khoản thành công!" : "Không tìm thấy tài khoản!");
+    }
+
+    public List<TaiKhoanNguoiDung> LayDanhSachTaiKhoan() => new List<TaiKhoanNguoiDung>(taiKhoanList);
+
+    public void HienThiTaiKhoan()
+    {
+        if (taiKhoanList.Count == 0)
+        {
+            Console.WriteLine("Không có tài khoản nào.");
+        }
+        else
+        {
+            foreach (var tk in taiKhoanList)
+            {
+                Console.WriteLine($"ID: {tk.Id}, Tên: {tk.TenNguoiDung}, Email: {tk.Email}");
+            }
+        }
+    }
+}
+
+class PheDuyetPOD
+{
+    public void PheDuyet(int podId, string tenNguoiDung)
+    {
+        Console.WriteLine($"POD {podId} của người dùng {tenNguoiDung} đã được phê duyệt.");
+    }
+}
+
+class BaoCaoCoBan
+{
+    private PODManager podManager;
+    private QuanLyTaiKhoan quanLyTaiKhoan;
+
+    public BaoCaoCoBan(PODManager podManager, QuanLyTaiKhoan quanLyTaiKhoan)
+    {
+        this.podManager = podManager;
+        this.quanLyTaiKhoan = quanLyTaiKhoan;
+    }
+
+    public void XemBaoCaoCoBan()
+    {
+        Console.WriteLine("Báo cáo cơ bản POD:");
+        podManager.HienThiPOD();
+
+        Console.WriteLine("\nBáo cáo tài khoản người dùng:");
+        quanLyTaiKhoan.HienThiTaiKhoan();
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Example usage of classes
+        PODManager podManager = new PODManager();
+        podManager.ThemPOD(1, "POD1", "Active");
+        podManager.HienThiPOD();
+
+        QuanLyTaiKhoan quanLyTaiKhoan = new QuanLyTaiKhoan();
+        quanLyTaiKhoan.ThemTaiKhoan(1, "Nguyen Van A", "a@example.com");
+        quanLyTaiKhoan.HienThiTaiKhoan();
+
+        // Display basic report
+        BaoCaoCoBan baoCaoCoBan = new BaoCaoCoBan(podManager, quanLyTaiKhoan);
+        baoCaoCoBan.XemBaoCaoCoBan();
+    }
+}
