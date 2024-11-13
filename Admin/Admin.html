@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POD Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: #343a40;
+            color: white;
+            padding: 1rem;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #4f5962;
+            margin-bottom: 1rem;
+        }
+
+        .menu-item {
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #4f5962;
+        }
+
+        .menu-item.active {
+            background: #007bff;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: calc(100% - 250px);
+        }
+
+        .header {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .data-table {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>POD Admin</h2>
+            </div>
+            <div class="menu-item active" onclick="showTab('dashboard')">Dashboard</div>
+            <div class="menu-item" onclick="showTab('users')">Quản lý người dùng</div>
+            <div class="menu-item" onclick="showTab('bookings')">Quản lý đặt chỗ</div>
+            <div class="menu-item" onclick="showTab('locations')">Quản lý địa điểm</div>
+            <div class="menu-item" onclick="showTab('services')">Quản lý dịch vụ</div>
+            <div class="menu-item" onclick="showTab('reports')">Báo cáo</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Welcome to the POD Admin Dashboard</h1>
+                <p>Manage your users, bookings, locations, and services here.</p>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="dashboard" class="tab-content active">
+                <h2>Dashboard</h2>
+                <div class="stats-container">
+                    <div class="stat-card">Total Users: 1200</div>
+                    <div class="stat-card">Bookings: 300</div>
+                    <div class="stat-card">Locations: 5</div>
+                    <div class="stat-card">Services: 12</div>
+                </div>
+            </div>
+
+            <div id="users" class="tab-content">
+                <h2>Quản lý người dùng</h2>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Doe</td>
+                                <td>johndoe@example.com</td>
+                                <td>
+                                    <button class="btn btn-primary">Edit</button>
+                                    <button class="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            <!-- More user data -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="bookings" class="tab-content">
+                <h2>Quản lý đặt chỗ</h2>
+                <!-- Booking management content -->
+            </div>
+
+            <div id="locations" class="tab-content">
+                <h2>Quản lý địa điểm</h2>
+                <!-- Location management content -->
+            </div>
+
+            <div id="services" class="tab-content">
+                <h2>Quản lý dịch vụ</h2>
+                <!-- Service management content -->
+            </div>
+
+            <div id="reports" class="tab-content">
+                <h2>Báo cáo</h2>
+                <!-- Report content -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show the selected tab
+            document.getElementById(tabId).classList.add('active');
+
+            // Set active class on the clicked menu item
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

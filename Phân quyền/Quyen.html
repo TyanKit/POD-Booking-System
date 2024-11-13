@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POD Booking System - Phân Quyền</title>
+    <style>
+        /* Basic Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .card input, .card select, .card button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: border 0.3s ease;
+        }
+
+        .card input:focus, .card select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .card button {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .card button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        /* Dashboard Styles */
+        #dashboard h2 {
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+
+        .nav-item {
+            padding: 12px;
+            margin: 8px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .nav-item.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Role-specific Features */
+        .feature h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginForm" class="card">
+            <h2>Đăng nhập POD Booking System</h2>
+            <div class="error hidden" id="errorMessage">Vui lòng nhập đầy đủ thông tin đăng nhập!</div>
+            <input type="text" id="username" placeholder="Tên đăng nhập" required>
+            <input type="password" id="password" placeholder="Mật khẩu" required>
+            <select id="userRole">
+                <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+                <option value="staff">Staff</option>
+                <option value="customer">Customer</option>
+            </select>
+            <button onclick="login()">Đăng nhập</button>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard" class="card hidden">
+            <h2>Dashboard POD Booking System</h2>
+            <div id="userInfo"></div>
+            <button onclick="logout()">Đăng xuất</button>
+
+            <!-- Feature Menu -->
+            <div id="menuContainer">
+                <!-- Admin Features -->
+                <div class="admin-only feature hidden">
+                    <h3>Quản lý hệ thống</h3>
+                    <div class="nav-item">Quản lý người dùng</div>
+                    <div class="nav-item">Cấu hình hệ thống</div>
+                    <div class="nav-item">Báo cáo tổng quan</div>
+                </div>
+
+                <!-- Manager Features -->
+                <div class="manager-only feature hidden">
+                    <h3>Quản lý địa điểm</h3>
+                    <div class="nav-item">Quản lý nhân viên</div>
+                    <div class="nav-item">Báo cáo doanh thu</div>
+                    <div class="nav-item">Quản lý lịch làm việc</div>
+                </div>
+
+                <!-- Staff Features -->
+                <div class="staff-only feature hidden">
+                    <h3>Quản lý đặt chỗ</h3>
+                    <div class="nav-item">Xem lịch làm việc</div>
+                    <div class="nav-item">Xử lý đặt chỗ</div>
+                    <div class="nav-item">Hỗ trợ khách hàng</div>
+                </div>
+
+                <!-- Customer Features -->
+                <div class="customer-only feature hidden">
+                    <h3>Dịch vụ khách hàng</h3>
+                    <div class="nav-item">Đặt chỗ mới</div>
+                    <div class="nav-item">Lịch sử đặt chỗ</div>
+                    <div class="nav-item">Thanh toán</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Role-based permissions
+        const permissions = {
+            admin: ['admin-only', 'manager-only', 'staff-only', 'customer-only'],
+            manager: ['manager-only', 'staff-only'],
+            staff: ['staff-only'],
+            customer: ['customer-only']
+        };
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('userRole').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (!username || !password) {
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            errorMessage.classList.add('hidden');
+            sessionStorage.setItem('user', JSON.stringify({ username, role }));
+            updateUI(role);
+            toggleVisibility("loginForm", "dashboard");
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('user');
+            toggleVisibility("dashboard", "loginForm");
+        }
+
+        // Update UI based on role
+        function updateUI(role) {
+            const userInfo = document.getElementById('userInfo');
+            const username = JSON.parse(sessionStorage.getItem('user')).username;
+            userInfo.innerHTML = `<p>Xin chào, ${username}</p><p>Vai trò: ${role}</p>`;
+            document.querySelectorAll('.feature').forEach(el => el.classList.add('hidden'));
+            permissions[role].forEach(permission => {
+                document.querySelectorAll(`.${permission}`).forEach(el => el.classList.remove('hidden'));
+            });
+        }
+
+        // Toggle visibility between elements
+        function toggleVisibility(hideId, showId) {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+        }
+
+        // Load session user data on page load
+        window.onload = function() {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            if (user) {
+                document.getElementById('username').value = user.username;
+                document.getElementById('userRole').value = user.role;
+                updateUI(user.role);
+                toggleVisibility("loginForm", "dashboard");
+            }
+        };
+
+        // Handle active menu item style
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
