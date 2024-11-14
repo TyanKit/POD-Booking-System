@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+
+namespace QuanLyPOD
+{
+    // Cấu trúc POD
+    class POD
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+    }
+
+    // Cấu trúc Yêu cầu đặt POD
+    class YeuCauPOD
+    {
+        public int Id { get; set; }
+        public string TenNguoiDung { get; set; }
+        public int PodId { get; set; }
+        public string TrangThai { get; set; } // "Chờ phê duyệt", "Đã phê duyệt", "Từ chối"
+    }
+
+    // Lớp quản lý POD
+    class PODManager
+    {
+        private List<POD> pods = new List<POD>();
+
+        public void ThemPOD(int id, string name, string status)
+        {
+            pods.Add(new POD { Id = id, Name = name, Status = status });
+            Console.WriteLine("Thêm POD thành công!");
+        }
+
+        public POD TimPOD(int id)
+        {
+            return pods.Find(pod => pod.Id == id);
+        }
+
+        public void HienThiPOD()
+        {
+            foreach (var pod in pods)
+            {
+                Console.WriteLine($"ID: {pod.Id}, Name: {pod.Name}, Status: {pod.Status}");
+            }
+        }
+    }
+
+    // Lớp quản lý yêu cầu đặt POD
+    class QuanLyYeuCau
+    {
+        private List<YeuCauPOD> yeuCauList = new List<YeuCauPOD>();
+        private int nextId = 1; // ID tự động tăng cho yêu cầu
+
+        // Người dùng yêu cầu đặt POD
+        public void GuiYeuCau(string tenNguoiDung, int podId)
+        {
+            yeuCauList.Add(new YeuCauPOD { Id = nextId++, TenNguoiDung = tenNguoiDung, PodId = podId, TrangThai = "Chờ phê duyệt" });
+            Console.WriteLine("Yêu cầu đặt POD đã được gửi!");
+        }
+
+        // Admin phê duyệt hoặc từ chối yêu cầu
+        public void PheDuyetYeuCau(int yeuCauId, bool duyet, PODManager podManager)
+        {
+            var yc = yeuCauList.Find(y => y.Id == yeuCauId);
+            if (yc != null)
+            {
+                if (duyet)
+                {
+                    yc.TrangThai = "Đã phê duyệt";
+                    var pod = podManager.TimPOD(yc.PodId);
+                    if (pod != null)
+                    {
+                        pod.Status = "Đã được đặt"; // Cập nhật trạng thái của POD
+                        Console.WriteLine($"Yêu cầu của người dùng {yc.TenNguoiDung} đã được phê duyệt.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Không tìm thấy POD để phê duyệt!");
+                    }
+                }
+                else
+                {
+                    yc.TrangThai = "Từ chối";
+                    Console.WriteLine($"Yêu cầu của người dùng {yc.TenNguoiDung} đã bị từ chối.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Không tìm thấy yêu cầu với ID này!");
+            }
+        }
+
+        // Hiển thị các yêu cầu
+        public void HienThiYeuCau()
+        {
+            foreach (var yc in yeuCauList)
+            {
+                Console.WriteLine($"ID: {yc.Id}, Người dùng: {yc.TenNguoiDung}, POD ID: {yc.PodId}, Trạng thái: {yc.TrangThai}");
+            }
+        }
+    }
+
+    // Chương trình chính
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            PODManager podManager = new PODManager();
+            QuanLyYeuCau quanLyYeuCau = new QuanLyYeuCau();
+
+            // Thêm POD
+            podManager.ThemPOD(1, "POD A", "Chưa được đặt");
+            podManager.ThemPOD(2, "POD B", "Chưa được đặt");
+            podManager.HienThiPOD();
+
+            // Người dùng gửi yêu cầu đặt POD
+            quanLyYeuCau.GuiYeuCau("User A", 1);
+            quanLyYeuCau.GuiYeuCau("User B", 2);
+
+            // Hiển thị danh sách yêu cầu
+            Console.WriteLine("\nDanh sách yêu cầu:");
+            quanLyYeuCau.HienThiYeuCau();
+
+            // Admin phê duyệt yêu cầu của User A
+            quanLyYeuCau.PheDuyetYeuCau(1, true, podManager);  // Phê duyệt
+            quanLyYeuCau.PheDuyetYeuCau(2, false, podManager); // Từ chối
+
+            // Hiển thị lại danh sách yêu cầu và trạng thái của POD
+            Console.WriteLine("\nDanh sách yêu cầu sau khi phê duyệt:");
+            quanLyYeuCau.HienThiYeuCau();
+
+            Console.WriteLine("\nTrạng thái POD sau khi phê duyệt:");
+            podManager.HienThiPOD();
+        }
+    }
+}
